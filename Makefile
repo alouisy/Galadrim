@@ -16,18 +16,15 @@ CFLAGS = -Werror -Wall -Wextra
 all: $(NAME)
 
 $(NAME):
-	@make -C libft/
 	@gcc $(CFLAGS) -c $(SRCS) $(INCLUDES)
-	@gcc -o2 $(CFLAGS) -o $(NAME) $(OBJS) $(INCLUDES) $(LIBS)
+	@gcc -o3 $(CFLAGS) -o $(NAME) $(OBJS) $(INCLUDES) $(LIBS)
 	@echo "\"agar-ai\" has been succefully created !"
 
 clean:
-	@make -C libft/ clean
 	@/bin/rm -f $(OBJS)
 	@echo "AGAR-AI Object files deleted."
 
 fclean: clean
-	@make -C libft/ fclean
 	@/bin/rm -f $(NAME)
 	@echo "AGAR-AI Executable deleted."
 

@@ -1,23 +1,27 @@
 #include "galadrim.h"
 
-t_cell	*new_cell(char **tab)
+t_cell	*new_cell(int tab[3])
 {
 	t_cell	*cell;
 
+	cell = NULL;
 	cell = (t_cell *)malloc(sizeof(t_cell));
 	if (cell)
 	{
-		cell->id = ft_atoi(tab[0]);
-		cell->x = ft_atoi(tab[1]);
-		cell->y = ft_atoi(tab[2]);
+		cell->id = tab[0];
+		cell->x = tab[1];
+		cell->y = tab[2];
 		cell->dist = 0;
 		cell->dist_diag = 0;
+		cell->dist_diag_r = 0;
+		cell->cell = NULL;
+		cell->prev = NULL;
 		cell->next = NULL;
 	}
 	return (cell);
 }
 
-void	add_cell(char **tab, t_prms *prm)
+void	add_cell(int tab[3], t_prms *prm)
 {
 	t_cell	*list;
 
@@ -33,29 +37,34 @@ void	add_cell(char **tab, t_prms *prm)
 	}
 }
 
-int		split_n_get(char *line, t_prms *prm)
+void	split_line(char *line, t_prms *prm)
 {
-	char	**split;
+	int		i, tab[3];
+	char	*token, *string, *tofree;
 
+	i = -1;
+	tofree = string = strdup(line);
+	assert(string != NULL);
+	while ((token = strsep(&string, ",")) != NULL)
+		tab[++i] = atoi(token);
+	free(tofree);
+	add_cell(tab, prm);
 	prm->nb_cell_total++;
-	split = ft_strsplit(line, ',');
-	add_cell(split, prm);
-	return (1);
 }
 
-void	get_info(t_prms *prm)
+void	get_parsed_data(int fd, t_prms *prm)
 {
+	char	*line;
 	int		i;
-	int		check;
 
 	i = 0;
-	check = -1;
-	prm->time = ft_atoi(prm->tab[0]);
-	if (prm->time > 0 && prm->tab != NULL)
+	while (get_next_line(fd, &line) == 1)
 	{
-		while (prm->tab[++i] != NULL)
-			split_n_get(prm->tab[i], prm);
+		if (i == 0)
+			prm->time = (double)atoi(line);
+		else
+		 	split_line(line, prm);
+		i++;
+		free(line);
 	}
-	else
-		ft_error("ERROR", 1);
 }

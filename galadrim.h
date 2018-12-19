@@ -3,15 +3,14 @@
 
 # include <math.h>
 # include <stdio.h>
+# include <assert.h>
 # include "libft/includes/libft.h"
 
 typedef struct		s_prms
 {
-	int				time;
+	double			time;
 	int				nb_cell;
 	int				nb_cell_total;
-	char			*text;
-	char			**tab;
 	struct s_cell	*cell_list;
 	struct s_cell	*player;
 	struct s_soluce	*solution;
@@ -23,8 +22,8 @@ typedef struct		s_cell
 	int				x;
 	int				y;
 	int				dist;
-	float			dist_diag;
-	int				id_next_cell;
+	double			dist_diag;
+	double			dist_diag_r;
 	struct s_cell	*cell;
 	struct s_cell	*prev;
 	struct s_cell	*next;
@@ -40,10 +39,10 @@ typedef struct		s_soluce
 /*
 ** parser.c
 */
-void				get_info(t_prms *prm);
-int					split_n_get(char *line, t_prms *prm);
-void				add_cell(char **tab, t_prms *prm);
-t_cell				*new_cell(char **tab);
+void				get_parsed_data(int fd, t_prms *prm);
+void				split_line(char *line, t_prms *prm);
+void				add_cell(int tab[3], t_prms *prm);
+t_cell				*new_cell(int tab[3]);
 /*
 ** maths.c
 */

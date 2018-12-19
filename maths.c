@@ -7,8 +7,11 @@ void	get_dist(t_prms *prm)
 	tmp = prm->cell_list;
 	while (tmp != NULL)
 	{
-		tmp->dist = (tmp->x - prm->player->x) + (tmp->y - prm->player->y);
-		tmp->dist_diag = sqrt(((tmp->x - prm->player->x) * (tmp->x - prm->player->x)) + ((tmp->y - prm->player->y) * (tmp->y - prm->player->y)));
+		tmp->dist = abs(tmp->x - prm->player->x) + abs(tmp->y - prm->player->y);
+		tmp->dist_diag = sqrt(pow((tmp->x - prm->player->x), 2) + pow((tmp->y - prm->player->y), 2));
+		tmp->dist_diag_r = ceil(tmp->dist_diag);
+//		tmp->dist_diag_r = ceil(sqrt(pow((tmp->x - prm->player->x), 2) + pow((tmp->y - prm->player->y), 2)));
+//		tmp->dist_diag = round(sqrt(pow((tmp->x - prm->player->x), 2) + pow((tmp->y - prm->player->y), 2)));
 		tmp = tmp->next;
 	}
 }

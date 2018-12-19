@@ -18,6 +18,6 @@ int		safe_open(char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		ft_error("Error While Trying To Open The File !", 1);
+		ft_error("ERROR - Can not open the file !", 1);
 	return (fd);
 }

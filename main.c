@@ -1,21 +1,20 @@
 #include "galadrim.h"
 
+static void		aux_usage(char *str)
+{
+	printf("Usage: %s <input.txt>\n", str);
+	printf("       %s\n", str);
+}
+
 static void		prm_init(t_prms *prm)
 {
+	int		origin[3] = {0, 0, 0};
+
 	prm->time = 0;
 	prm->nb_cell = 0;
 	prm->nb_cell_total = 0;
-	prm->text = NULL;
-	prm->tab = NULL;
 	prm->cell_list = NULL;
-	prm->player = (t_cell *)malloc(sizeof(t_cell));
-	prm->player->x = 0;
-	prm->player->y = 0;
-	prm->player->dist = 0;
-	prm->player->dist_diag = 0;
-	prm->player->cell = NULL;
-	prm->player->prev = NULL;
-	prm->player->next = NULL;
+	prm->player = new_cell(origin);
 	prm->solution = NULL;
 }
 
@@ -27,17 +26,25 @@ int				main(int argc, char *argv[])
 	prm_init(&prm);
 	if (argc == 1 || argc == 2)
 	{
-		fd = (argc == 1) ? 0 : safe_open(argv[1]);
-		prm.text = ft_get_file(fd);
-		prm.tab = ft_strsplit(prm.text, '\n');
-		get_info(&prm);
-		while (prm.time > 0 && prm.cell_list)
+		if (!(strcmp(argv[1], "--help")) || !(strcmp(argv[1], "-h")))
+			aux_usage(argv[0]);
+		else
 		{
-			get_dist(&prm);
-			get_next_cell(&prm);
+			fd = (argc == 1) ? 0 : safe_open(argv[1]);
+			if (fd != -1)
+			{
+				get_parsed_data(fd, &prm);
+				while (prm.time > 0 && prm.cell_list)
+				{
+					get_dist(&prm);
+					get_next_cell(&prm);
+				}
+			}
+			else
+				aux_usage(argv[0]);
 		}
 	}
 	else
-		ft_error("BAD INPUT !", 1);
+		aux_usage(argv[0]);
 	return (0);
 }
